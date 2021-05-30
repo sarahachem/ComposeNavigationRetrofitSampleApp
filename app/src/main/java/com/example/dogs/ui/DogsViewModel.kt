@@ -8,7 +8,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.dogs.apis.DogsApi
-import com.example.dogs.model.Breeds
 import com.example.dogs.model.DogBreed
 import com.example.dogs.apis.checkSuccessful
 import kotlinx.coroutines.Dispatchers

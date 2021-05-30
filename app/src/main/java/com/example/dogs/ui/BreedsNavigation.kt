@@ -6,6 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.ExperimentalMaterialApi
@@ -16,7 +18,11 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
@@ -27,8 +33,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.navArgs
 import com.example.dogs.R
+import com.example.dogs.compose.component.CircleProgress
 import com.example.dogs.compose.component.text.ContentText
 import com.example.dogs.compose.theme.ChipTheme
+import kotlinx.coroutines.launch
 
 @ExperimentalComposeUiApi
 @ExperimentalAnimationApi
@@ -46,6 +54,9 @@ class BreedsFragment : Fragment() {
     ): View {
         return ComposeView(requireContext()).apply {
             setContent {
+                val isLoadingDogBreeds by viewModel.isLoadingDogBreedsLiveData.observeAsState()
+                val dogBreeds by viewModel.dogBreedsLiveData.observeAsState()
+                val expandedCardIds = viewModel.expandedCardIdsList.collectAsState()
                 ChipTheme {
                     val scope = rememberCoroutineScope()
                     val listState = rememberLazyListState()
@@ -72,7 +83,39 @@ class BreedsFragment : Fragment() {
                             )
                         }
                     ) {
-                        DogBreedsCards(scope = scope, state = listState, viewModel = viewModel)
+                        Box(
+                            modifier = Modifier.fillMaxSize(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            dogBreeds?.let {
+                                DogBreedsCards(
+                                    state = listState,
+                                    breeds = it,
+                                    expandedCardIds = expandedCardIds.value,
+                                    onCardArrowClicked = { id -> viewModel.onCardArrowClicked(id) },
+                                    onDogBreedCLicked = { breed ->
+                                        scope.launch {
+                                            viewModel.onDogBreedCLicked(
+                                                breed
+                                            )
+                                        }
+                                    },
+                                    onDogSubBreedCLicked = { breed, subBreed ->
+                                        scope.launch {
+                                            viewModel.onDogSubBreedCLicked(
+                                                breed,
+                                                subBreed
+                                            )
+                                        }
+                                    }
+                                )
+                            }
+                            if (isLoadingDogBreeds == true) {
+                                CircleProgress(
+                                    Modifier.matchParentSize()
+                                )
+                            }
+                        }
                     }
                 }
             }
