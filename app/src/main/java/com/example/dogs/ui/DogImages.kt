@@ -13,8 +13,6 @@ import androidx.compose.material.Card
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -23,8 +21,6 @@ import com.example.dogs.compose.theme.FourtyEightDp
 import com.example.dogs.compose.theme.SixteenDp
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 
 @ExperimentalComposeUiApi
 @ExperimentalAnimationApi
@@ -33,39 +29,37 @@ import kotlinx.coroutines.launch
 @Composable
 fun DogImages(
     modifier: Modifier = Modifier,
-    scope: CoroutineScope,
-    viewModel: DogsViewModel,
-    name: String
+    images: List<String>,
+    name: String,
+    onRefresh: (String) -> Unit
 ) {
     val state = rememberLazyListState()
-    val dogImages by viewModel.dogImagesLiveData.observeAsState()
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         SwipeRefresh(
             state = rememberSwipeRefreshState(false),
-            onRefresh = { scope.launch { viewModel.refresh(name) } },
+            onRefresh = { onRefresh.invoke(name) },
         ) {
             LazyColumn(
                 state = state,
                 modifier = Modifier
                     .fillMaxSize()
             ) {
-                dogImages?.second?.let {
-                    items(it) { item ->
-                        Card(
-                            modifier = modifier
-                                .fillMaxWidth()
-                                .padding(
-                                    start = FourtyEightDp,
-                                    end = FourtyEightDp,
-                                    top = SixteenDp
-                                ),
-                            shape = MaterialTheme.shapes.large,
-                            elevation = 0.dp,
-                        ) {
-                            DogImage(url = item)
-                        }
+                items(images) { item ->
+                    Card(
+                        modifier = modifier
+                            .fillMaxWidth()
+                            .padding(
+                                start = FourtyEightDp,
+                                end = FourtyEightDp,
+                                top = SixteenDp
+                            ),
+                        shape = MaterialTheme.shapes.large,
+                        elevation = 0.dp,
+                    ) {
+                        DogImage(url = item)
                     }
                 }
+
             }
         }
     }

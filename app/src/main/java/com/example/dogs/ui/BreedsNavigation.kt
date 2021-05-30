@@ -141,6 +141,7 @@ class BreedImagesFragment : Fragment() {
         return ComposeView(requireContext()).apply {
             setContent {
                 ChipTheme {
+                    val dogImages by viewModel.dogImagesLiveData.observeAsState()
                     val scope = rememberCoroutineScope()
                     Scaffold(
                         modifier = Modifier.heightIn(56.dp),
@@ -165,12 +166,14 @@ class BreedImagesFragment : Fragment() {
                             )
                         }
                     ) {
-                        DogImages(
-                            modifier = Modifier,
-                            viewModel = viewModel,
-                            name = args.name,
-                            scope = scope
-                        )
+                        dogImages?.second?.let {
+                            DogImages(
+                                modifier = Modifier,
+                                images = it,
+                                name = args.name,
+                                onRefresh = { scope.launch { viewModel.refresh(args.name) } }
+                            )
+                        }
                     }
                 }
             }
