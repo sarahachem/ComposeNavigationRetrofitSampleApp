@@ -3,5 +3,5 @@
     <string name="CANCEL">Cancel</string>
     <string name="no_data">Couldn\'t find any data</string>
     <string name="no_image_error">No image found</string>
-    <string name="god_breeds">Dog breeds</string>
+    <string name="dog_breeds">Dog breeds</string>
 </resources>

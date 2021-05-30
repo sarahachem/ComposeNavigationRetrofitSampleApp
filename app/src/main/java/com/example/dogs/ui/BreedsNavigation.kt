@@ -6,9 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.ExperimentalMaterialApi
@@ -32,7 +29,6 @@ import androidx.navigation.fragment.navArgs
 import com.example.dogs.R
 import com.example.dogs.compose.component.text.ContentText
 import com.example.dogs.compose.theme.ChipTheme
-import com.example.dogs.compose.theme.TwelveDp
 
 @ExperimentalComposeUiApi
 @ExperimentalAnimationApi
@@ -60,7 +56,7 @@ class BreedsFragment : Fragment() {
                                 elevation = 0.dp,
                                 title = {
                                     ContentText(
-                                        text = stringResource(id = R.string.god_breeds),
+                                        text = stringResource(id = R.string.dog_breeds),
                                         textAlign = TextAlign.Start
                                     )
                                 },
