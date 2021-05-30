@@ -1,0 +1,15 @@
+{
+    "message": {
+        "affenpinscher": [],
+        "african": [
+            "shepherd"
+        ],
+        "mastiff": [
+            "bull",
+            "english",
+            "tibetan"
+        ],
+        "pitbull": []
+    },
+    "status": "success"
+}

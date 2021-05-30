@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/breeds_nav_graph"
+    app:startDestination="@id/breeds_fragment">
+
+    <fragment
+        android:id="@+id/breeds_fragment"
+        android:name="com.example.dogs.ui.BreedsFragment"
+        app:launchSingleTop="true">
+        <action
+            android:id="@+id/action_to_images"
+            app:destination="@id/breed_images_fragment">
+            <argument
+                android:name="name"
+                app:argType="string" />
+        </action>
+    </fragment>
+
+    <fragment
+        android:id="@+id/breed_images_fragment"
+        android:name="com.example.dogs.ui.BreedImagesFragment"
+        app:launchSingleTop="true">
+
+        <argument
+            android:name="name"
+            app:argType="string" />
+
+    </fragment>
+
+</navigation>
