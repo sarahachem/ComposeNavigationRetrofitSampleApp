@@ -1,0 +1,44 @@
+variables:
+  GIT_SUBMODULE_STRATEGY: recursive
+
+stages:
+  - build
+  - check
+  - deploy
+  - postDeploy
+
+.only-default: &only-default
+  only:
+    - main
+    - merge_requests
+    - tags
+  tags:
+    - java11
+  except:
+    - /^.*_inhouse.*$/
+    - /^.*_RC.*$/
+
+Compile:
+  <<: *only-default
+  stage: build
+  needs: []
+  script: ./gradlew HealthMate:assembleInhouseRelease --no-configuration-cache
+  except:
+    - tags
+    - main
+
+Test:
+  <<: *only-default
+  stage: check
+  needs: []
+  script: ./gradlew testDebugUnitTest DogBreeds:testInhouseDebug --no-configuration-cache
+  artifacts:
+    name: Tests reports
+    paths:
+      - "*/build/reports"
+    when: on_failure
+    expire_in: 1 day
+  tags:
+    - java11
+
+

@@ -152,8 +152,7 @@ class DogsViewModelFactory(
     private val dogsApi: DogsApi,
     private val connectivityManager: ConnectivityManager
 ) : ViewModelProvider.Factory {
-
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return (DogsViewModel(app, dogsApi, connectivityManager) as T)
     }
 }

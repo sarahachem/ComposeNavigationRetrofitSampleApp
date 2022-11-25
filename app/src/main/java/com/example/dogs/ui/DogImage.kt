@@ -60,6 +60,8 @@ fun DogImage(
                     val textModifier = Modifier.align(Alignment.Center)
                     BodyText(modifier = textModifier, text = text, color = textColor)
                 }
+
+                else -> {}
             }
         }
     }
