@@ -1,6 +1,24 @@
 variables:
   GIT_SUBMODULE_STRATEGY: recursive
 
+name: Run commands on different operating systems
+on:
+  push:
+    branches: [ githubCI ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  Run-self-hosted:
+    name: Run npm on Ubuntu
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '14'
+      - run: npm help
+
 stages:
   - build
   - check
@@ -22,7 +40,7 @@ Compile:
   <<: *only-default
   stage: build
   needs: []
-  script: ./gradlew HealthMate:assembleInhouseRelease --no-configuration-cache
+  script: ./gradlew app:assembledebug --no-configuration-cache
   except:
     - tags
     - main
@@ -31,7 +49,7 @@ Test:
   <<: *only-default
   stage: check
   needs: []
-  script: ./gradlew testDebugUnitTest DogBreeds:testInhouseDebug --no-configuration-cache
+  script: ./gradlew testDebugUnitTest app:testInhouseDebug --no-configuration-cache
   artifacts:
     name: Tests reports
     paths:
